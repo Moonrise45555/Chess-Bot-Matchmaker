@@ -1,30 +1,13 @@
-Board = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
-StartPos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-class Piece:
-    Pawn =  0b001
-    Bishop =0b010
-    Knight =0b011
-    King =  0b100
-    Rook =  0b101
-    Queen = 0b110
-    def ColorSwitch(Piece):
-        return Piece ^ 0b1000
-class Move:
-    whereFrom = ""
-    whereTo = ""
-    def __init__(self,wheref,wheret):
-        self.whereFrom = wheref
-        self.whereTo = wheret
-def LoadFromFEN(FEN):
-    global Board
+import Piece
+def LoadFromFEN(FEN, Board):
     CurrentX = 0
-    CurrentY = 0
+    CurrentY = 7
     s = True
     for i in FEN:
         s = True
+        #Goes through all pieces and places them
         if i == "P":
             Board[CurrentY][CurrentX] = Piece.Pawn
-            print("placed white pawn at", CurrentX, " ", CurrentY)
         elif i == "B":
             Board[CurrentY][CurrentX] = Piece.Bishop
         elif i == "R":
@@ -50,38 +33,20 @@ def LoadFromFEN(FEN):
             Board[CurrentY][CurrentX] = Piece.ColorSwitch(Piece.Knight)
 
         elif i == "/":
-            CurrentY += 1
+            #Slash indicates moving to the next row. S needs to be false, or else the lower increase of CurrentX will set it to 1 instead of 0
+            CurrentY -= 1
             CurrentX = 0
             s = False
 
 
         else:
+            #it must be a number, so the cursor is shifted right by it
             CurrentX += int(i)
              
 
         if s:
             CurrentX += 1
        
-        if CurrentY == 8:
+        if CurrentY == -1:
             print("Loading FEN String failed.")
             return False
-LoadFromFEN(StartPos)
-for i in Board:
-    print(i,"\n")
-def MakeMove(mov,Board):
-    temp = Board[int(mov.whereFrom[1])][int(mov.whereFrom[0])]
-    Board[int(mov.whereFrom[1])][int(mov.whereFrom[0])] = 0
-    Board[int(mov.whereTo[1])][int(mov.whereTo[0])] = temp
-def GetPossibleMoves(board):
-    for i in board:
-        for j in i:
-            pass
-def PrintBoard(board):
-    for i in board:
-        print(i,"\n")
-while True:
-    k = input("enther sometime: ")
-    MakeMove(Move(k[0:2],k[2:4]),Board)
-    PrintBoard(Board)
-
-
