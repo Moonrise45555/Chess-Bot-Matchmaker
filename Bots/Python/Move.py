@@ -52,10 +52,22 @@ def MakeMove(mov,Board):
     Board[int(mov.MoveString[3])][int(mov.MoveString[2])] = Moving
     return True
 
-def IsLegalMove(mov):
-    print(mov.MoveString)
+def GetColor(tile,Board):
+    if Board[int(tile[1])][int(tile[0])] > 7:
+        return 8
+    else:
+        if Board[int(tile[1])][int(tile[0])] == 0:
+            return 4
+        return 0
+    
+def IsLegalMove(mov,Board):
     for i in mov.MoveString:
         if int(i) > 7 or int(i) < 0:
             return False
+    if GetColor(mov.MoveString[0:2],Board) == GetColor(mov.MoveString[2:4],Board):
+        return False
+
     return True
+
+
     
