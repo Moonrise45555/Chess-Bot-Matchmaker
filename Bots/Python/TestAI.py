@@ -25,7 +25,7 @@ while True:
     k = input("enther sometime: ")
     Move.MakeMove(Move.Move(Move.NotationToDecimal(k)),Board)
     BoardMod.PrintBoard(Board)
-    for i in GenerateMoves.GenerateKnightMoves(Board):
+    for i in GenerateMoves.GenerateKnightMoves(Board,8):
         Move.MakeMove(i,Board)
     print(PE.EvaluatePosition(Board)) 
 

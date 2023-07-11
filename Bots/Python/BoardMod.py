@@ -21,6 +21,7 @@ IntToPieceAbreviation = {
 }
 alphabet = [" ", "a","b","c","d","e","f","g","h"]
 def PrintBoard(board):
+    """Prints the board provided in a relatively neat way."""
     def PrintLine(Arr, UseConvert=True):
         for i in range(len(Arr)):
             print("  |  ",end="")
@@ -45,3 +46,13 @@ def PrintBoard(board):
     PrintSeperator()
     PrintLine(alphabet)
     PrintSeperator()
+    
+def AccessPointAt(board,x,y):
+    return board[y][x]
+
+class Vector2:
+    x = 0
+    y = 0
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
