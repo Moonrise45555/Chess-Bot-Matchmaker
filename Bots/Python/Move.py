@@ -9,45 +9,8 @@ class Move:
     def __init__(self,moveString):
         """moveString works with numerical notation"""
         self.MoveString = moveString
-NotationDec = {
-    0:"a",
-    1:"b",
-    2:"c",
-    3:"d",
-    4:"e",
-    5:"f",
-    6:"g",
-    7:"h"
-}
-DecNotation = {
-    "a":0,
-    "b":1,
-    "c":2,
-    "d":3,
-    "e":4,
-    "f":5,
-    "g":6,
-    "h":7
-     
-}
-def DecimalToNotation(Move):
-    """Converts standalone Numerical notation to Standard notation"""
-    Move = str(Move)
-    newMove = ""
-    newMove = NotationDec[int(Move[0])]
-    newMove = newMove + Move[1]
-    newMove = newMove  + NotationDec[int(Move[2])]
-    newMove = newMove + Move[3]
-    return newMove
-def NotationToDecimal(Move):
-    """converts standalone Numerical notation to standard notation"""
-    Move = str(Move)
-    newMove = ""
-    newMove = str(DecNotation[Move[0]])
-    newMove = newMove + Move[1]
-    newMove = newMove + str(DecNotation[Move[2]])
-    newMove = newMove + Move[3]
-    return newMove
+
+
 
 
 
@@ -69,7 +32,7 @@ def GetColor(tile,Board):
             return 4
         return 0
     
-def IsLegalMove(mov,Board, Based = 0):
+def IsLegalMove(mov,Board):
     """checks if the function is outside the board at some point, and if it moves onto the own colour.
     Based is currently not recommended to use. Works with move classes and arrayed numerical. 
     """
@@ -77,9 +40,9 @@ def IsLegalMove(mov,Board, Based = 0):
     #Exists for compatibility with old code, numerical
     if type(mov) == Move:
         for i in mov.MoveString:
-            if int(i) > (7 + Based) or int(i) < (0 + Based):
+            if int(i) > (7 ) or int(i) < (0 ):
                 return False
-        if GetColor([str(int(x) - Based) for x in mov.MoveString[0:2]],Board) == GetColor([str(int(x) - Based) for x in mov.MoveString[2:4]],Board):
+        if GetColor([str(int(x) ) for x in mov.MoveString[0:2]],Board) == GetColor([str(int(x)) for x in mov.MoveString[2:4]],Board):
             return False
         return True
     
@@ -87,11 +50,11 @@ def IsLegalMove(mov,Board, Based = 0):
     if type(mov) == type([]):
 
         for i in mov:
-            if int(i) > (7 + Based) or int(i) < (0 + Based):
+            if int(i) > (7 ) or int(i) < (0 ):
                 return False
 
-            if GetColor([str(int(x) - Based) for x in mov[0:2]],Board) == GetColor([str(int(x) - Based) for x in mov[2:4]],Board):
-                return False
+        if GetColor(mov[0:2],Board) == GetColor( mov[2:4],Board):
+            return False
         return True
 
 

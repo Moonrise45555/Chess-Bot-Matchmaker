@@ -3,18 +3,20 @@ import Move
 from BoardMod import Vector2
 from BoardMod import AccessPointAt
 from copy import deepcopy
-def GenerateAllMoves(Board):
-    return GenerateKnightMoves(Board)
+from Conversions import ArrayedNumericalToNumerical
+def GenerateAllMoves(Board, Side):
+    return GenerateKnightMoves(Board, Side) + GenerateKingMoves(Board, Side)
 
 
-def FindAll(Piece, Board):
+def FindAll(piece, Board):
     """Takes in a Piece int and returns an array of Vector2 containing all positions of instances of this piece."""
     pie = []
     for Y in range(8):
         for X in range(8):
-            if (Board[Y][X] == Piece.Knight) or (Board[Y][X] == Piece.ColorSwitch(Piece.Knight)):
+            if (Board[Y][X] == piece):
                 pie.append(Vector2(X,Y))
     return pie
+
 def GenerateKnightMoves(Board,Side):
     """Returns all possible knight  moves for the given side in Move classes."""
     Knights = []
@@ -35,37 +37,60 @@ def GenerateKnightMoves(Board,Side):
     for i in Moves:
         if Move.IsLegalMove(i,Board):
             retMoves.append(i)
-    return [Move.Move(str()) for x in retMoves]
+
+    return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
     
 
 
 def GenerateKingMoves(Board,Side):
-    #Works One-Based
 
     King = []
     Moves = []
-    for Y in Board:
-        for X in Y:
-            if AccessPointAt(Board,X,Y) == (Piece.King + Side):
-                King.append(Vector2(X,Y))
-    #Gathers all Kings
+    King = FindAll(Piece.King + Side, Board)
+    retMoves = []
+   
 
     for K in King:
-        StartPosString = str(K[0] + 1) + str(K[1] + 1)
-        StartPosInt = [int(x) for x in StartPosString]
-        Moves.Append(StartPosString + str(StartPosInt[0]  - 1) + str(StartPosInt[1] - 1))
-        Moves.Append(StartPosString + str(StartPosInt[0]  + 1) + str(StartPosInt[1] - 1))
-        Moves.Append(StartPosString + str(StartPosInt[0]) + str(StartPosInt[1]      - 1))
-        Moves.Append(StartPosString + str(StartPosInt[0] ) +     str(StartPosInt[1] + 1))
-        Moves.Append(StartPosString + str(StartPosInt[0]  - 1) +     str(StartPosInt[1]))
-        Moves.Append(StartPosString + str(StartPosInt[0]  + 1) +     str(StartPosInt[1]))
-        Moves.Append(StartPosString + str(StartPosInt[0]  + 1) + str(StartPosInt[1] + 1))
-        Moves.Append(StartPosString + str(StartPosInt[0]  - 1) + str(StartPosInt[1] + 1))
-    Moves = [Move.Move(i) for i in Moves]
-    retMoves = []
+        StartPos = [K.x] + [K.y]
+        Moves.append(StartPos + [(StartPos[0] + 0)] + [(StartPos[1] + 1)] )
+        Moves.append(StartPos + [(StartPos[0] + 1)] + [(StartPos[1] + 0)] )
+        Moves.append(StartPos + [(StartPos[0] + 1)] + [(StartPos[1] - 1)] )
+        Moves.append(StartPos + [(StartPos[0] + 1)] + [(StartPos[1] + 1)] )
+        Moves.append(StartPos + [(StartPos[0] - 1)] + [(StartPos[1] - 0)] )
+        Moves.append(StartPos + [(StartPos[0] - 1)] + [(StartPos[1] + 1)] )
+        Moves.append(StartPos + [(StartPos[0] - 1)] + [(StartPos[1] - 1)] )
+        Moves.append(StartPos + [(StartPos[0] + 0)] + [(StartPos[1] - 1)] )
+        
     for i in Moves:
         if Move.IsLegalMove(i,Board):
             retMoves.append(i)
+
+    return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
+
+def GenerateStraightMoves(Board,Side):
+
+    Pieces = []
+    Moves = []
+    Pieces = FindAll(Piece.Rook + Side, Board) + FindAll(Piece.Queen + Side,Board)
+    retMoves = []
+   
+
+    for K in Pieces:
+        StartPos = [K.x] + [K.y]
+        for i in range(K.x + 1, K.x + 7):
+            print(i," ", K.y)
+            if AccessPointAt(Board, i,  K.y) % 8  == AccessPointAt(Board,K.x,K.y) % 8:
+                break
+
+            Moves.append(StartPos + [(i)] + [(StartPos[1])] )
+    print(Moves)
+    return
+        
+    for i in Moves:
+        if Move.IsLegalMove(i,Board):
+            retMoves.append(i)
+
+    return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
 
 
 
