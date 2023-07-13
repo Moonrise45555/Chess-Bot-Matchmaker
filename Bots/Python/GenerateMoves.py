@@ -2,10 +2,11 @@ import Piece
 import Move
 from BoardMod import Vector2
 from BoardMod import AccessPointAt
+from Move import GetColor
 from copy import deepcopy
 from Conversions import ArrayedNumericalToNumerical
 def GenerateAllMoves(Board, Side):
-    return GenerateKnightMoves(Board, Side) + GenerateKingMoves(Board, Side)
+    return GenerateKnightMoves(Board, Side) + GenerateKingMoves(Board, Side) + GenerateStraightMoves(Board,Side) + GenerateDiagonalMoves(Board,Side)
 
 
 def FindAll(piece, Board):
@@ -76,15 +77,116 @@ def GenerateStraightMoves(Board,Side):
    
 
     for K in Pieces:
+        #Gathers all possible moves in every direction. very same-y
         StartPos = [K.x] + [K.y]
-        for i in range(K.x + 1, K.x + 7):
-            print(i," ", K.y)
-            if AccessPointAt(Board, i,  K.y) % 8  == AccessPointAt(Board,K.x,K.y) % 8:
+        #positive X
+        for i in range(K.x + 1 , K.x + 7):
+            if i > 7 or i < 0:
+                break
+            
+            if GetColor([i ,K.y],Board)  == GetColor([K.x ,K.y],Board):
                 break
 
             Moves.append(StartPos + [(i)] + [(StartPos[1])] )
-    print(Moves)
-    return
+            #negative X
+        for i in range( 1 ,  7):
+            if K.x - i > 7 or K.x - i < 0:
+                break
+            
+            if GetColor([ K.x - i ,K.y],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(K.x - i)] + [(StartPos[1])] )
+            #positive Y
+        for i in range(K.y + 1 , K.y + 7):
+            if i > 7 or i < 0:
+                break
+            
+            if GetColor([K.x ,i],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(StartPos[0])] + [(i)] )
+        #negative X
+        for i in range( 1 ,  7):
+            if K.y - i > 7 or K.y - i < 0:
+                break
+            
+            if GetColor([ K.x  ,K.y- i ],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [StartPos[0]] + [(K.y - i )] )
+        
+
+
+        
+    for i in Moves:
+        if Move.IsLegalMove(i,Board):
+            retMoves.append(i)
+
+    return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
+    
+
+
+def GenerateDiagonalMoves(Board,Side):
+
+    Pieces = []
+    Moves = []
+    Pieces = FindAll(Piece.Bishop + Side, Board) + FindAll(Piece.Queen + Side,Board)
+    retMoves = []
+   
+
+    for K in Pieces:
+        #Gathers all possible moves in every direction. very same-y
+        StartPos = [K.x] + [K.y]
+        #positive X
+        for i in range(1 ,7):
+            if i + K.x > 7 or i + K.x < 0 or i + K.y > 7 or K.y + i < 0:
+                break
+            
+            if GetColor([i + K.x ,K.y + i],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(K.x + i)] + [(K.y + i)] )
+            #negative X
+        for i in range(1 ,7):
+            if  K.x - i > 7 or  K.x - i < 0 or K.y - i > 7 or K.y - i < 0:
+                break
+            
+            if GetColor([K.x - i ,K.y - i],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(K.x - i)] + [(K.y - i)] )
+        
+        #Other
+
+        for i in range(1 ,7):
+            if  K.x - i > 7 or  K.x - i < 0 or i + K.y > 7 or K.y + i < 0:
+                break
+            
+            if GetColor([K.x - i ,K.y + i],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(K.x - i)] + [(K.y + i)] )
+            #negative X
+
+
+        for i in range(1 ,7):
+            if  K.x + i > 7 or  K.x + i < 0 or K.y - i > 7 or K.y - i < 0:
+                break
+            
+            if GetColor([K.x + i ,K.y - i],Board)  == GetColor([K.x ,K.y],Board):
+                break
+
+            Moves.append(StartPos + [(K.x + i)] + [(K.y - i)] )
+
+       
+
+
+
+        
+        
+
+
         
     for i in Moves:
         if Move.IsLegalMove(i,Board):
@@ -92,7 +194,32 @@ def GenerateStraightMoves(Board,Side):
 
     return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
 
+def GeneratePawnMoves(Board,Side):
 
+    Pawn = []
+    Moves = []
+    Pawn = FindAll(Piece.Pawn + Side, Board)
+    retMoves = []
+   
+
+    for K in Pawn:
+        StartPos = [K.x] + [K.y]
+        YModifier = GetColor([K.x,K.y],Board)
+        if  YModifier == 8:
+            YModifier = -1
+        if YModifier == 0:
+            YModifier = 1
+
+        #standard moving forward
+        Moves.append(StartPos + [(StartPos[0] + 0)] + [(StartPos[1] + YModifier)] )
+        
+
+        
+    for i in Moves:
+        if Move.IsLegalMove(i,Board):
+            retMoves.append(i)
+
+    return [Move.Move(ArrayedNumericalToNumerical(x)) for x in retMoves]
 
 
 

@@ -24,19 +24,13 @@ assert Conversions.DecimalToNotation("0123") == "a1c3"
 
 
 while True:
-    k = input()
+    sleep(1)
+    k =  "e4e4"
     Move.MakeMove(Move.Move(Conversions.NotationToDecimal(k)),Board)
-    for i in GenerateMoves.GenerateKnightMoves(Board,8):
     
-        Move.MakeMove(i,Board)
-    for i in GenerateMoves.GenerateKingMoves(Board,0):
-        Move.MakeMove(i,Board)
-    for i in GenerateMoves.GenerateKnightMoves(Board,0):
+    BoardMod.PrintBoard(Board)
+    sleep(1)
     
-        Move.MakeMove(i,Board)
-    for i in GenerateMoves.GenerateKingMoves(Board,8):
-        Move.MakeMove(i,Board)
-    GenerateMoves.GenerateStraightMoves(Board,0)
     
     BoardMod.PrintBoard(Board)
 

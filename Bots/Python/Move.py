@@ -1,3 +1,4 @@
+from BoardMod import AccessPointAt
 def Info():
     """Numerical notation, Standard notation, arrayed Numerical"""
 
@@ -56,6 +57,21 @@ def IsLegalMove(mov,Board):
         if GetColor(mov[0:2],Board) == GetColor( mov[2:4],Board):
             return False
         return True
+    
+def IsAtStartLane(Board, Position):
+    """Takes in the position of a Pawn and returns whether that pawn is at its starting place. Accepts Vector2."""
+    if GetColor(AccessPointAt(Board, Position.x, Position.y)) == 0:
+        if Position.y == 1:
+            return True
+        else:
+            return False
+
+    if GetColor(AccessPointAt(Board, Position.x, Position.y)) == 8:
+        if Position.y == 6:
+            return True
+        else:
+            return False
+    ValueError
 
 
 
