@@ -42,8 +42,9 @@ def LoadFromFEN(FEN, Board):
         else:
             #it must be a number, so the cursor is shifted right by it
             CurrentX += int(i)
+            s = False
              
-
+        
         if s:
             CurrentX += 1
        
