@@ -20,10 +20,12 @@ BoardMod.PrintBoard(Board)
 
 
 
-    
+   
 assert Conversions.NotationToDecimal("a1a2") == "0102", BoardMod.NotationToDecimal("a1a2")
 
 assert Conversions.DecimalToNotation("0123") == "a1c3"
+assert Piece.IsBetterFor(10,0,0) == 0
+assert Piece.IsBetterFor(0,-1,8) == 1
 
 while True:
     import random
